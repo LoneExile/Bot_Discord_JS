@@ -65,8 +65,6 @@ Queue.find()
   //.sort({ _id: 1 })
   .exec(function (err, post) {
     if (err) throw err
-    //bot_status = author[0].song
-    //console.log(post[0].song)
     //console.log(post.length)
     //console.log(post[0]._id)
   })
@@ -110,7 +108,7 @@ client.on('message', async (msg) => {
   const command = args.shift().toLowerCase()
   if (!client.commands.has(command)) return
 
-  console.log(`--msg is ${msg}`)
+  // console.log(`--msg is ${msg}`)
 
   let BOT = await Post.find({ title: 'bot_status' })
   try {

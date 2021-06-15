@@ -1,3 +1,5 @@
+const Queue = require('../models/queueModels')
+
 module.exports = {
   name: 'stop',
   execute(msg, bot_status) {
@@ -9,6 +11,10 @@ module.exports = {
       return msg.channel.send(
         'You have to be in a voice channel to stop the music!'
       )
+    Queue.deleteMany({}).exec(function (err, post) {
+      if (err) throw err
+    })
+
     console.log(`--stop ${serverQueue.songs[0].title}`)
     msg.channel.send(`stop ${serverQueue.songs[0].title}`)
     serverQueue.songs = []

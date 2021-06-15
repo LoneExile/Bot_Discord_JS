@@ -46,49 +46,45 @@ module.exports = {
         //songTitle = String(queueContruct.songs[0].title)
 
         // ************************************************************
-        // add song to db here
-        // push queueContruct to db then use it
-
-        var awesome_instance = await new Queue(queueContruct.songs[0], {
-          //title: songTitle,
-          //url: queueContruct.song[0].url,
-        })
+        //queueContruct.songs[0
+        var awesome_instance = await new Queue(song, {})
         awesome_instance.save(function (err) {
           if (err) return handleError(err)
         })
         //console.log(awesome_instance)
 
-        Queue.find()
-          //.sort({ _id: 1 })
-          .exec(function (err, queue) {
-            if (err) throw err
-            //bot_status = author[0].song
-            //console.log(queue[0])
-            // console.log(queue[0].url)
-            // console.log(queue.length)
-            // console.log(queue[0]._id)
-            // console.log(undefined == post[2])
-          })
+        //bot_status = author[0].song
+        //console.log(queue[0])
+        // console.log(queue[0].url)
+        // console.log(queue.length)
+        // console.log(queue[0]._id)
+        // console.log(undefined == post[2])
 
         // ************************************************************
 
         try {
           var connection = await voiceChannel.join()
           queueContruct.connection = connection
-          Queue.find().exec(function (err, queue) {
-            if (err) throw err
-            console.log(queue[0])
-          })
-          this.playX(msg)
+
+          let songFromDB = await Queue.find().exec()
+          let songDB = songFromDB[0]
+          //console.log(songDB.url)
+
           //this.play(msg, queueContruct.songs[0])
+          this.play(msg, songDB)
         } catch (err) {
           console.log(err)
           queue.delete(msg.guild.id)
           return msg.channel.send(err)
         }
       } else {
-        // add song to db here
         serverQueue.songs.push(song)
+
+        var awesome_instance = await new Queue(song, {})
+        awesome_instance.save(function (err) {
+          if (err) return handleError(err)
+        })
+
         return msg.channel.send(`${song.title} has been added to the queue!`)
       }
     } catch (error) {
@@ -97,16 +93,21 @@ module.exports = {
     }
   },
 
-  play(msg, song) {
+  async play(msg, song) {
     const queue = msg.client.queue
     const guild = msg.guild
     const serverQueue = queue.get(msg.guild.id)
+
+    // let songFromDB = await Queue.find().exec()
+    // song = songFromDB[0]
+    // console.log(song.url)
 
     if (!song) {
       //serverQueue.voiceChannel.leave()
       queue.delete(guild.id)
       return
     }
+    //console.log(song)
 
     let stream = ytdl(song.url, {
       filter: 'audioonly',
@@ -123,6 +124,14 @@ module.exports = {
             type: 'unknown',
           })
           .on('finish', () => {
+            Queue.findByIdAndDelete(song._id, function (err, deleted) {
+              if (err) {
+                console.log(err)
+              } else {
+                console.log('Deleted !!')
+              }
+            })
+
             serverQueue.songs.shift()
             this.play(msg, serverQueue.songs[0])
           })
@@ -130,45 +139,5 @@ module.exports = {
       .catch((e) => {
         console.log(e)
       })
-  },
-
-  playX(msg) {
-    const queue = msg.client.queue
-    const guild = msg.guild
-    const serverQueue = queue.get(msg.guild.id)
-
-    Queue.find().exec(function (err, queue) {
-      if (err) throw err
-      console.log(queue[0].url)
-      let song = queue[0]
-      if (!song) {
-        //serverQueue.voiceChannel.leave()
-        queue.delete(guild.id)
-        return
-      }
-
-      let stream = ytdl(song.url, {
-        filter: 'audioonly',
-        opusEncoded: false,
-        fmt: 'mp3',
-        encoderArgs: ['-af', 'bass=g=10,dynaudnorm=f=200'],
-      })
-
-      msg.member.voice.channel
-        .join()
-        .then((connection) => {
-          let dispatcher = connection
-            .play(stream, {
-              type: 'unknown',
-            })
-            .on('finish', () => {
-              serverQueue.songs.shift()
-              this.play(msg, serverQueue.songs[0])
-            })
-        })
-        .catch((e) => {
-          console.log(e)
-        })
-    })
   },
 }
