@@ -75,11 +75,12 @@ module.exports = {
         try {
           var connection = await voiceChannel.join()
           queueContruct.connection = connection
-          // Queue.find().exec(function (err, queue) {
-          //   if (err) throw err
-          // })
-
-          this.play(msg, queueContruct.songs[0])
+          Queue.find().exec(function (err, queue) {
+            if (err) throw err
+            console.log(queue[0])
+          })
+          this.playX(msg)
+          //this.play(msg, queueContruct.songs[0])
         } catch (err) {
           console.log(err)
           queue.delete(msg.guild.id)
@@ -96,7 +97,7 @@ module.exports = {
     }
   },
 
-  async play(msg, song) {
+  play(msg, song) {
     const queue = msg.client.queue
     const guild = msg.guild
     const serverQueue = queue.get(msg.guild.id)
@@ -129,5 +130,45 @@ module.exports = {
       .catch((e) => {
         console.log(e)
       })
+  },
+
+  playX(msg) {
+    const queue = msg.client.queue
+    const guild = msg.guild
+    const serverQueue = queue.get(msg.guild.id)
+
+    Queue.find().exec(function (err, queue) {
+      if (err) throw err
+      console.log(queue[0].url)
+      let song = queue[0]
+      if (!song) {
+        //serverQueue.voiceChannel.leave()
+        queue.delete(guild.id)
+        return
+      }
+
+      let stream = ytdl(song.url, {
+        filter: 'audioonly',
+        opusEncoded: false,
+        fmt: 'mp3',
+        encoderArgs: ['-af', 'bass=g=10,dynaudnorm=f=200'],
+      })
+
+      msg.member.voice.channel
+        .join()
+        .then((connection) => {
+          let dispatcher = connection
+            .play(stream, {
+              type: 'unknown',
+            })
+            .on('finish', () => {
+              serverQueue.songs.shift()
+              this.play(msg, serverQueue.songs[0])
+            })
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+    })
   },
 }
