@@ -29,6 +29,7 @@ module.exports = {
         textChannel: msg.channel,
         voiceChannel: voiceChannel,
       }
+      // console.log(serverQueue)  // info
 
       if (!serverQueue) {
         const queueContruct = {
@@ -40,13 +41,11 @@ module.exports = {
           playing: true,
         }
         queue.set(msg.guild.id, queueContruct)
+
         queueContruct.songs.push(song)
-        //let playingNow = queueContruct.songs.push(song)
-        // console.log(queueContruct.songs[0])
-        //songTitle = String(queueContruct.songs[0].title)
 
         // ************************************************************
-        //queueContruct.songs[0
+        //queueContruct.songs[0]
         var awesome_instance = await new Queue(song, {})
         awesome_instance.save(function (err) {
           if (err) return handleError(err)
@@ -123,17 +122,16 @@ module.exports = {
           .play(stream, {
             type: 'unknown',
           })
-          .on('finish', () => {
-            Queue.findByIdAndDelete(song._id, function (err, deleted) {
-              if (err) {
-                console.log(err)
-              } else {
-                console.log('Deleted !!')
-              }
-            })
+          .on('finish', async () => {
+            let deletedSong = await Queue.findByIdAndDelete(song._id).exec()
+            //console.log('deleted')
+            let songFromDBx = await Queue.find().exec()
+            let songDBx = songFromDBx[0]
+            //console.log('next', songDBx.title)
+            this.play(msg, songDBx)
 
-            serverQueue.songs.shift()
-            this.play(msg, serverQueue.songs[0])
+            //serverQueue.songs.shift()
+            // this.play(msg, serverQueue.songs[0])
           })
       })
       .catch((e) => {
