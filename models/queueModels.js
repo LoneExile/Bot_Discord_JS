@@ -10,22 +10,26 @@ const mongoose = require('mongoose')
         */
 const queueSchema = new mongoose.Schema(
   {
-    qNumber: {
+    // qNumber: {
+    //   type: String,
+    //   require: [true, 'Post must have qNum'],
+    // },
+    // song: {
+    //   type: String,
+    //   require: [true, 'Post must have song'],
+    // },
+    title: {
       type: String,
-      require: [true, 'Post must have qNum'],
-    },
-    song: {
-      type: String,
-      require: [true, 'Post must have song'],
+      require: [true, 'Post must have title'],
     },
     url: {
       type: String,
       required: [true, 'Post must have url'],
     },
-    user: {
-      type: String,
-      require: [true, 'Post must have user'],
-    },
+    // user: {
+    //   type: String,
+    //   require: [true, 'Post must have user'],
+    // },
     textChannel: {
       type: String,
       require: [true, 'Post must have user'],

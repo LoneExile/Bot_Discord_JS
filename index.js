@@ -66,9 +66,9 @@ Queue.find()
   .exec(function (err, post) {
     if (err) throw err
     //bot_status = author[0].song
-    console.log(post[0].song)
-    console.log(post.length)
-    console.log(post[0]._id)
+    //console.log(post[0].song)
+    //console.log(post.length)
+    //console.log(post[0]._id)
   })
 
 Queue.find()
@@ -76,8 +76,8 @@ Queue.find()
   .exec(function (err, post) {
     if (err) throw err
     //bot_status = author[0].song
-    console.log(post[1].song)
-    console.log(undefined == post[2])
+    //console.log(post[1].song)
+    //console.log(undefined == post[2])
   })
 
 //----------------------discord-------------------------------
@@ -122,7 +122,7 @@ client.on('message', async (msg) => {
       if (err) return handleError(err)
     })
     console.log(awesome_instance.body)
-    //bot_status = awesome_instance.body
+    bot_status = awesome_instance.body
   }
 
   try {
@@ -148,4 +148,4 @@ app.use('/api/v1/posts', postRoutes)
 app.use('/api/v1/queue', queueRoutes)
 
 const port = process.env.PORT || 3000
-app.listen(port, console.log(`listening on port ${port}`))
+app.listen(port, () => console.log(`listening on port ${port}`))

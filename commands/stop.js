@@ -12,7 +12,6 @@ module.exports = {
     console.log(`--stop ${serverQueue.songs[0].title}`)
     msg.channel.send(`stop ${serverQueue.songs[0].title}`)
     serverQueue.songs = []
-    //serverQueue = undefined
     console.log(`--serverQueue.songs in stop have ${serverQueue.songs}`)
     serverQueue.connection.dispatcher.end()
   },

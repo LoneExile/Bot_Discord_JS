@@ -1,5 +1,6 @@
 const ytdl = require('ytdl-core')
 const { prefix } = require('../config/config')
+const Queue = require('../models/queueModels')
 
 module.exports = {
   name: 'play',
@@ -25,6 +26,8 @@ module.exports = {
       const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
+        textChannel: msg.channel,
+        voiceChannel: voiceChannel,
       }
 
       if (!serverQueue) {
@@ -36,14 +39,46 @@ module.exports = {
           //volume: 5,
           playing: true,
         }
-
         queue.set(msg.guild.id, queueContruct)
-
         queueContruct.songs.push(song)
+        //let playingNow = queueContruct.songs.push(song)
+        // console.log(queueContruct.songs[0])
+        //songTitle = String(queueContruct.songs[0].title)
+
+        // ************************************************************
+        // add song to db here
+        // push queueContruct to db then use it
+
+        var awesome_instance = await new Queue(queueContruct.songs[0], {
+          //title: songTitle,
+          //url: queueContruct.song[0].url,
+        })
+        awesome_instance.save(function (err) {
+          if (err) return handleError(err)
+        })
+        //console.log(awesome_instance)
+
+        Queue.find()
+          //.sort({ _id: 1 })
+          .exec(function (err, queue) {
+            if (err) throw err
+            //bot_status = author[0].song
+            //console.log(queue[0])
+            // console.log(queue[0].url)
+            // console.log(queue.length)
+            // console.log(queue[0]._id)
+            // console.log(undefined == post[2])
+          })
+
+        // ************************************************************
 
         try {
           var connection = await voiceChannel.join()
           queueContruct.connection = connection
+          // Queue.find().exec(function (err, queue) {
+          //   if (err) throw err
+          // })
+
           this.play(msg, queueContruct.songs[0])
         } catch (err) {
           console.log(err)
@@ -51,6 +86,7 @@ module.exports = {
           return msg.channel.send(err)
         }
       } else {
+        // add song to db here
         serverQueue.songs.push(song)
         return msg.channel.send(`${song.title} has been added to the queue!`)
       }
@@ -60,7 +96,7 @@ module.exports = {
     }
   },
 
-  play(msg, song) {
+  async play(msg, song) {
     const queue = msg.client.queue
     const guild = msg.guild
     const serverQueue = queue.get(msg.guild.id)
