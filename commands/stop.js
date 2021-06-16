@@ -30,7 +30,10 @@ module.exports = {
     // msg.channel.send(`stop ${serverQueue.songs[0].title}`)
     // serverQueue.songs = []
     // console.log(`--serverQueue.songs in stop have ${serverQueue.title}`)
-
-    serverQueue.connection.dispatcher.end()
+    try {
+      serverQueue.connection.dispatcher.end()
+    } catch (error) {
+      console.log('end is null')
+    }
   },
 }

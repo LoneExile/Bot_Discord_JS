@@ -58,24 +58,41 @@ export default {
    },
   },
   async created () {
-    try {
-      this.songCount = await this.fetchTasks()
 
-      //console.log(this.songCount.data.queue);
+    setInterval(async () => {
+      try {
+        this.songCount = await this.fetchTasks()
+        var demo = []
+        for (let index = 0; index < this.songCount.data.queue.length; index++) {
+            var taskArray = {
+                id: index, 
+                text: this.songCount.data.queue[index].title,
+            }
+            demo.push(taskArray)
+        }
+        if (this.tasks !== demo) {
+          this.tasks = []
+          this.tasks = demo
+        }
+      } catch (error) {
+        console.log(error);
+      } 
+    }, 10000)
 
-      for (let index = 0; index < this.songCount.data.queue.length; index++) {
-        //console.log(this.songCount.data.queue[index].title,);
-          var taskArray = {
-              id: index, 
-              text: this.songCount.data.queue[index].title,
-              //day: 'count = '+this.songCount.data.count[index].count 
-          }
-          this.tasks.push(taskArray)
-      }
+    // try {
+    //   this.songCount = await this.fetchTasks()
+    //   for (let index = 0; index < this.songCount.data.queue.length; index++) {
+    //       var taskArray = {
+    //           id: index, 
+    //           text: this.songCount.data.queue[index].title,
+    //           //day: 'count = '+this.songCount.data.count[index].count 
+    //       }
+    //       this.tasks.push(taskArray)
+    //   }
       
-    } catch (error) {
-      console.log(error);
-    }
+    // } catch (error) {
+    //   console.log(error);
+    // }
     },
 }
 </script>
