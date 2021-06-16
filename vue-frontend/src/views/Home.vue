@@ -1,5 +1,8 @@
 <template>
     <!-- v-if -->
+     
+    <!-- <sTasks :tasks="tasks" /> -->
+    <h1>hello</h1>
     <div v-show="showAddTask">
         <!-- you can move v-show="showAddTask" to <AddTask />  -->
       <AddTask @add-task="addTask" />
@@ -11,6 +14,7 @@
 <script>
 import Tasks from '@/components/Tasks.vue';
 import AddTask from '@/components/AddTask.vue';
+import sTasks from '@/components/sTasks.vue';
 
 export default {
     name: 'Home',
@@ -20,6 +24,7 @@ export default {
     components: {
         Tasks,
         AddTask,
+        sTasks,
     },
     data() {
         return {

@@ -1,6 +1,7 @@
 <template>
   <div v-show="aboutPage" class="container">
-    <h1>Song Playing Now</h1>
+    <Hsong  title="Song Playing Now" />
+    <sTasks :tasks="tasks" /> 
   </div>
   <div  class="container">
     <Header  v-show="aboutPage" @toggle-add-task="toggleAddTask" :title="aboutPage? 'Top Play Song':'About'" :showAddTask="showAddTask" />
@@ -17,18 +18,22 @@
 <script>
 import Header from './components/Header';
 import Footer from '@/components/Footer.vue';
+import Hsong from '@/components/Hsong.vue';
+import sTasks from '@/components/sTasks.vue';
 
 export default {
   name: 'App',
   components: {
     Header,
+    Hsong,
+    sTasks,
     // Tasks,
     // AddTask,
     Footer,
   },
   data() {
     return {
-      //tasks: [],
+      tasks: [],
       showAddTask: false,
     }
   },
@@ -46,60 +51,32 @@ export default {
     toggleAddTask() {
       this.showAddTask = !this.showAddTask
     },
-    // task is newTask from [this.$emit('add-task', newTask)] in AddTask.vue
-    // async addTask(task) {
-    //   const res = await fetch('api/tasks', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(task)
-    //   })
-    //   const data = await res.json()
-    //   this.tasks = [...this.tasks,data]
-    // },
-    // async deleteTask(id) {
-    // //  console.log('task',id); 
-    //   if (confirm('Are you sure you want to delete')) {
-    //     const res = await fetch(`api/tasks/${id}`, {
-    //       method: 'DELETE'
-    //     })
-    //     res.status === 200 ? (this.tasks = this.tasks.filter((task) => task.id !== id)): alert('Error deleting task');
-    //     // filter((task)) want anything except this id
-    //   }   
-    // },
-    // async toggleReminder (id) {
-    //   const taskToToggle = await this.fetchTask(id)
-    //   const updTask = {...taskToToggle, reminder:!taskToToggle.reminder}
-    //   const res = await fetch(`api/tasks/${id}`, {
-    //     method: 'PUT',
-    //     headers: {
-    //       'Content-type': 'application/json'
-    //     },
-    //     body: JSON.stringify(updTask)
-    //   })
-    //   const data = await res.json()
-    //   //console.log('toggle',id);
-    //   // each(task) if(task.id = id) {return change reminder to opposite val} else {if not match return task}
-      
-    //   //console.log(this.tasks[0].id);
-    //   //console.log(...this.tasks);
-    //   this.tasks = this.tasks.map((task) => task.id === id? {...task, reminder: data.reminder} : task)
-    // },
-    // async fetchTasks() {
-    //   const res = await fetch('api/tasks');
-    //   const data = await res.json()
-    //   return data
-    // },
-    // async fetchTask(id) {
-    //   const res = await fetch(`api/tasks/${id}`);
-    //   const data = await res.json()
-    //   return data
-    // }
+    async fetchTasks() {
+        const res = await fetch('http://localhost:3000/api/v1/queue/');
+        const what = await res.json()
+        return what
+   },
   },
-  // async created () {
-  //   this.tasks = await this.fetchTasks()
-  // },
+  async created () {
+    try {
+      this.songCount = await this.fetchTasks()
+
+      //console.log(this.songCount.data.queue);
+
+      for (let index = 0; index < this.songCount.data.queue.length; index++) {
+        //console.log(this.songCount.data.queue[index].title,);
+          var taskArray = {
+              id: index, 
+              text: this.songCount.data.queue[index].title,
+              //day: 'count = '+this.songCount.data.count[index].count 
+          }
+          this.tasks.push(taskArray)
+      }
+      
+    } catch (error) {
+      console.log(error);
+    }
+    },
 }
 </script>
 
