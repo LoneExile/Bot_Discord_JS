@@ -2,6 +2,7 @@ const Discord = require('discord.js')
 const express = require('express')
 const mongoose = require('mongoose')
 const fs = require('fs')
+const cors = require('cors')
 
 const postRoutes = require('./routes/postRoutes')
 const queueRoutes = require('./routes/queueRoutes')
@@ -41,6 +42,7 @@ const connectWithRetry = () => {
 //const { log } = require('console')
 
 connectWithRetry()
+app.use(cors({}))
 //bot_start()
 
 //-----------------------database testing stuff------------------------------

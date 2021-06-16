@@ -4,3 +4,5 @@ Dockerfile
 .git
 .gitignore
 docker-compose*
+bot-frontend
+vue-frontend
