@@ -95,10 +95,17 @@ module.exports = {
   async countFunction(song) {
     findCount = await Count.find().exec()
 
-    haveSongYet = findCount.some(async (inCount) => {
+    haveSongYet = findCount.some((inCount) => {
       inCount.title === song.title
     })
     console.log('check have song yet = ', haveSongYet)
+    if (!haveSongYet) {
+      var addCountSong = await new Count(song, {})
+      addCountSong.save(function (err) {
+        if (err) return handleError(err)
+        console.log('new song count!!')
+      })
+    }
 
     findCount.map(async (inCount) => {
       console.log('find Count = ', inCount.title === song.title && haveSongYet)
@@ -113,13 +120,14 @@ module.exports = {
             console.log('count on!!')
           }
         )
-      } else if (!haveSongYet) {
-        var addCountSong = await new Count(song, {})
-        addCountSong.save(function (err) {
-          if (err) return handleError(err)
-          console.log('new song count!!')
-        })
       }
+      // if (inCount.title !== song.title &&!haveSongYet) {
+      //   var addCountSong = await new Count(song, {})
+      //   addCountSong.save(function (err) {
+      //     if (err) return handleError(err)
+      //     console.log('new song count!!')
+      //   })
+      // }
     })
   },
 
