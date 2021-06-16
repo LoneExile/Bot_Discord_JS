@@ -1,13 +1,5 @@
 const mongoose = require('mongoose')
 
-/** 
-        textChannel: msg.channel,
-        voiceChannel: voiceChannel,
-        connection: null,
-        songs: [],
-        //   volume: 5,
-        playing: true, 
-        */
 const queueSchema = new mongoose.Schema(
   {
     // qNumber: {
@@ -38,13 +30,17 @@ const queueSchema = new mongoose.Schema(
       type: String,
       require: [true, 'Post must have user'],
     },
+    connection: {
+      type: Boolean,
+      require: [true, 'Post must have user'],
+    },
+    playing: {
+      type: Boolean,
+      require: [true, 'Post must have user'],
+    },
   }
   //{ collection: 'completed' }
 )
-
-// queueSchema.virtual('name').get(function () {
-//   return this.title + ', ' + this.body
-// })
 
 const Queue = mongoose.model('Queue', queueSchema)
 module.exports = Queue

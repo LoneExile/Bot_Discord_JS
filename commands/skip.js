@@ -1,6 +1,7 @@
+const Queue = require('../models/queueModels')
 module.exports = {
   name: 'skip',
-  execute(msg, bot_status) {
+  async execute(msg, bot_status) {
     if (bot_status === 'off') {
       return msg.channel.send('bot is offline')
     }
@@ -11,8 +12,15 @@ module.exports = {
       )
     if (!serverQueue)
       return msg.channel.send('There is no song that I could skip!')
+
+    let songFromDB = await Queue.find().exec()
+    let songDB = songFromDB[0]
+    msg.channel.send(`skip ${songDB.title}`)
+    console.log(`skip ${songDB.title}`)
+
     serverQueue.connection.dispatcher.end()
-    msg.channel.send(`skip ${serverQueue.songs[0].title}`)
-    console.log(`skip ${serverQueue.songs[0].title}`)
+
+    // msg.channel.send(`skip ${serverQueue.songs[0].title}`)
+    // console.log(`skip ${serverQueue.songs[0].title}`)
   },
 }

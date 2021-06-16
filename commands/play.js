@@ -28,46 +28,40 @@ module.exports = {
         url: songInfo.videoDetails.video_url,
         textChannel: msg.channel,
         voiceChannel: voiceChannel,
+        //connection: null,
+        //playing: true,
       }
       // console.log(serverQueue)  // info
 
       if (!serverQueue) {
         const queueContruct = {
-          textChannel: msg.channel,
-          voiceChannel: voiceChannel,
+          //textChannel: msg.channel,
+          //voiceChannel: voiceChannel,
           connection: null,
-          songs: [],
+          //songs: [],
           //volume: 5,
           playing: true,
         }
         queue.set(msg.guild.id, queueContruct)
+        // let songFromDB = await Queue.find().exec()
+        //queue.set(msg.guild.id, songFromDB)
 
-        queueContruct.songs.push(song)
-
-        // ************************************************************
-        //queueContruct.songs[0]
-        var awesome_instance = await new Queue(song, {})
-        awesome_instance.save(function (err) {
+        //queueContruct.songs.push(song)
+        var addSong = await new Queue(song, {})
+        addSong.save(function (err) {
           if (err) return handleError(err)
         })
-        //console.log(awesome_instance)
-
-        //bot_status = author[0].song
-        //console.log(queue[0])
-        // console.log(queue[0].url)
-        // console.log(queue.length)
-        // console.log(queue[0]._id)
-        // console.log(undefined == post[2])
-
-        // ************************************************************
 
         try {
           var connection = await voiceChannel.join()
-          queueContruct.connection = connection
 
-          let songFromDB = await Queue.find().exec()
-          let songDB = songFromDB[0]
-          //console.log(songDB.url)
+          queueContruct.connection = connection
+          // upDateConnection = await Queue.findByIdAndUpdate(addSong._id, {
+          //   connection: true,
+          // })
+
+          songFromDB = await Queue.find().exec()
+          songDB = songFromDB[0]
 
           //this.play(msg, queueContruct.songs[0])
           this.play(msg, songDB)
@@ -77,10 +71,10 @@ module.exports = {
           return msg.channel.send(err)
         }
       } else {
-        serverQueue.songs.push(song)
+        //serverQueue.songs.push(song)
 
-        var awesome_instance = await new Queue(song, {})
-        awesome_instance.save(function (err) {
+        var pushSong = await new Queue(song, {})
+        pushSong.save(function (err) {
           if (err) return handleError(err)
         })
 
@@ -95,18 +89,13 @@ module.exports = {
   async play(msg, song) {
     const queue = msg.client.queue
     const guild = msg.guild
-    const serverQueue = queue.get(msg.guild.id)
-
-    // let songFromDB = await Queue.find().exec()
-    // song = songFromDB[0]
-    // console.log(song.url)
+    //const serverQueue = queue.get(msg.guild.id)
 
     if (!song) {
       //serverQueue.voiceChannel.leave()
       queue.delete(guild.id)
       return
     }
-    //console.log(song)
 
     let stream = ytdl(song.url, {
       filter: 'audioonly',
