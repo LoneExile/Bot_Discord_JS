@@ -5,6 +5,7 @@ const fs = require('fs')
 
 const postRoutes = require('./routes/postRoutes')
 const queueRoutes = require('./routes/queueRoutes')
+const countRoutes = require('./routes/countRoutes')
 const BOT_TOKEN = require('./config/TOKEN')
 const {
   prefix,
@@ -144,6 +145,7 @@ app.use(express.json())
 
 app.use('/api/v1/posts', postRoutes)
 app.use('/api/v1/queue', queueRoutes)
+app.use('/api/v1/count', countRoutes)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`listening on port ${port}`))

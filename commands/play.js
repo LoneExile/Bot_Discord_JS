@@ -1,6 +1,7 @@
 const ytdl = require('ytdl-core')
 const { prefix } = require('../config/config')
 const Queue = require('../models/queueModels')
+const Count = require('../models/countModels')
 
 module.exports = {
   name: 'play',
@@ -26,10 +27,12 @@ module.exports = {
       const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
-        textChannel: msg.channel,
-        voiceChannel: voiceChannel,
+        // textChannel: msg.channel,
+        // voiceChannel: voiceChannel,
+
         //connection: null,
         //playing: true,
+        count: 0,
       }
       // console.log(serverQueue)  // info
 
@@ -50,6 +53,23 @@ module.exports = {
         var addSong = await new Queue(song, {})
         addSong.save(function (err) {
           if (err) return handleError(err)
+        })
+
+        findCount = await Count.find().exec()
+        console.log(findCount)
+        console.log(findCount === [])
+
+        testCount = findCount.map(async (inCount) => {
+          inCount.title === addSong.title
+            ? { ...inCount, count: inCount.count++ }
+            : inCount
+
+          if (inCount.title !== addSong.title) {
+            var addCountSong = await new Count(song, {})
+            addCountSong.save(function (err) {
+              if (err) return handleError(err)
+            })
+          }
         })
 
         try {
