@@ -32,7 +32,7 @@ module.exports = {
 
         //connection: null,
         //playing: true,
-        count: 0,
+        count: 1,
       }
       // console.log(serverQueue)  // info
 
@@ -54,23 +54,7 @@ module.exports = {
         addSong.save(function (err) {
           if (err) return handleError(err)
         })
-
-        findCount = await Count.find().exec()
-        console.log(findCount)
-        console.log(findCount === [])
-
-        testCount = findCount.map(async (inCount) => {
-          inCount.title === addSong.title
-            ? { ...inCount, count: inCount.count++ }
-            : inCount
-
-          if (inCount.title !== addSong.title) {
-            var addCountSong = await new Count(song, {})
-            addCountSong.save(function (err) {
-              if (err) return handleError(err)
-            })
-          }
-        })
+        this.countFunction(song)
 
         try {
           var connection = await voiceChannel.join()
@@ -98,12 +82,45 @@ module.exports = {
           if (err) return handleError(err)
         })
 
+        this.countFunction(song)
+
         return msg.channel.send(`${song.title} has been added to the queue!`)
       }
     } catch (error) {
       console.log(error)
       msg.channel.send(error.msg)
     }
+  },
+
+  async countFunction(song) {
+    findCount = await Count.find().exec()
+
+    haveSongYet = findCount.some(async (inCount) => {
+      inCount.title === song.title
+    })
+    console.log('check have song yet = ', haveSongYet)
+
+    findCount.map(async (inCount) => {
+      console.log('find Count = ', inCount.title === song.title && haveSongYet)
+      if (inCount.title === song.title && haveSongYet) {
+        Count.findByIdAndUpdate(
+          inCount._id,
+          {
+            count: inCount.count + 1,
+          },
+          function (err, howmuch) {
+            if (err) return handleError(err)
+            console.log('count on!!')
+          }
+        )
+      } else if (!haveSongYet) {
+        var addCountSong = await new Count(song, {})
+        addCountSong.save(function (err) {
+          if (err) return handleError(err)
+          console.log('new song count!!')
+        })
+      }
+    })
   },
 
   async play(msg, song) {

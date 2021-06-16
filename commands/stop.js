@@ -23,6 +23,9 @@ module.exports = {
       // msg.channel.send(`stop all song`)
     })
 
+    if (serverQueue === undefined) {
+      return msg.channel.send('no song to stop')
+    }
     // console.log(`--stop ${serverQueue.songs[0].title}`)
     // msg.channel.send(`stop ${serverQueue.songs[0].title}`)
     // serverQueue.songs = []
