@@ -1,5 +1,7 @@
 # Bot Discord with MEVN
 
+---
+
 ### Project setup
 
 #### install
@@ -54,3 +56,19 @@ npm run build
 #### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+---
+
+## Features
+
+- on Discord
+
+  - play
+  - stop
+  - skip
+  - on/off bot
+
+- web application
+
+  - show song playing
+  - show top played song
