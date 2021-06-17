@@ -1,8 +1,5 @@
 <template>
     <!-- v-if -->
-     
-    <!-- <sTasks :tasks="tasks" /> -->
-    <h1>hello</h1>
     <div v-show="showAddTask">
         <!-- you can move v-show="showAddTask" to <AddTask />  -->
       <AddTask @add-task="addTask" />

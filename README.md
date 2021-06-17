@@ -9,7 +9,7 @@ npm install
 touch config/TOKEN.js
 ```
 
-#### config bot token
+#### config bot token in config/TOKEN.js
 
 ```javascript
 BOT_TOKEN = 'add your token here'
