@@ -17,6 +17,8 @@ docker logs [name of your bot container] -f
 
 > runing the bot in prod-mode need to set local environment variable
 
+---
+
 ## Frontend for discord bot
 
 ### Project setup
