@@ -2,8 +2,19 @@
 
 ### Project setup
 
+#### install
+
 ```
 npm install
+touch config/TOKEN.js
+```
+
+#### config bot token
+
+```javascript
+BOT_TOKEN = 'add your token here'
+
+module.exports = BOT_TOKEN
 ```
 
 #### runing the bot in dev-mode
