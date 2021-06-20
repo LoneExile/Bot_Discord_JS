@@ -112,4 +112,4 @@ app.use('/api/v1/queue', queueRoutes)
 app.use('/api/v1/count', countRoutes)
 
 const port = process.env.PORT || 3000
-app.listen(port, () => console.log(`listening on port ${port}`))
+app.listen(port, () => console.log(`listening on port: ${port}`))
