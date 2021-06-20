@@ -47,40 +47,7 @@ app.use(cors({}))
 
 //-----------------------database testing stuff------------------------------
 const Post = require('./models/postModels')
-const Queue = require('./models/queueModels')
-
-// var awesome_instance = new Queue({
-//   song: 'Astrid S - It´s Ok If You Forget Me (Live Acoustic)',
-//   url: 'https://youtu.be/4F923YigtG8',
-// })
-// awesome_instance.save(function (err) {
-//   if (err) return handleError(err)
-// })
-// console.log(awesome_instance.body)
-
-// Queue.find({ song: 'Olivia Rodrigo - deja vu (Live)' }, function (err, author) {
-//   if (err) throw err
-//   //bot_status = author[0].song
-//   console.log(author[0].url)
-// })
-
-Queue.find()
-  //.sort({ _id: 1 })
-  .exec(function (err, post) {
-    if (err) throw err
-    //console.log(post.length)
-    //console.log(post[0]._id)
-  })
-
-Queue.find()
-  //.sort({ _id: 1 })
-  .exec(function (err, post) {
-    if (err) throw err
-    //bot_status = author[0].song
-    //console.log(post[1].song)
-    //console.log(undefined == post[2])
-  })
-
+//const Queue = require('./models/queueModels')
 //----------------------discord-------------------------------
 class Client extends Discord.Client {
   queue = new Map()
