@@ -32,4 +32,5 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm run bot
-      - run: docker logs bot-discord-js_node-app_1
+      #- run: docker logs bot-discord-js_node-app_1
+      - run: docker ps -a
