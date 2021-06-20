@@ -4,10 +4,9 @@
 
 ### Project setup
 
-#### install
+#### config
 
 ```
-npm install
 touch config/TOKEN.js
 ```
 
