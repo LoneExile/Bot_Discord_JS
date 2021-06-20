@@ -7,7 +7,7 @@ const cors = require('cors')
 const postRoutes = require('./routes/postRoutes')
 const queueRoutes = require('./routes/queueRoutes')
 const countRoutes = require('./routes/countRoutes')
-const BOT_TOKEN = require('./config/TOKEN')
+
 const {
   prefix,
   MONGO_USER,
@@ -44,6 +44,30 @@ const connectWithRetry = () => {
 connectWithRetry()
 app.use(cors({}))
 //bot_start()
+
+try {
+  if (!fs.existsSync('./config/TOKEN.js')) {
+    //file not exists
+    var text = "BOT_TOKEN = 'add your token here' \nmodule.exports = BOT_TOKEN"
+    fs.appendFile('./config/TOKEN.js', text, function (err) {
+      if (err) throw err
+      console.log('Saved!')
+    })
+  }
+} catch (err) {
+  console.error(err)
+}
+
+// fs.access('./config/TOKEN.js', fs.F_OK, (err) => {
+//   if (err) {
+//     console.error(err)
+//     return
+//   }
+
+//   //file exists
+// })
+
+const BOT_TOKEN = require('./config/TOKEN')
 
 //-----------------------database testing stuff------------------------------
 const Post = require('./models/postModels')
@@ -102,8 +126,11 @@ client.on('message', async (msg) => {
   }
 })
 //-----------------------------------------------------
-
-client.login(BOT_TOKEN)
+try {
+  client.login(BOT_TOKEN)
+} catch (error) {
+  console.log('add token at ./config/TOKEN.js')
+}
 
 app.get('/', (req, res) => {
   res.send('<h1>bot discord</h1>')
