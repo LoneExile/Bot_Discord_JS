@@ -13,7 +13,7 @@ jobs:
   build:
 
     #runs-on: ubuntu-latest
-    runs-on:${{matrix.ox}}
+    runs-on: ${{matrix.ox}}
     #strategy:
       #matrix:
         #os: [ubuntu-latest, windows-latest, macOS-latest]
