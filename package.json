@@ -7,8 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "bot": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build",
-    "down": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml down",
-    "install": "node install.js"
+    "down": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml down"
   },
   "keywords": [],
   "author": "",
