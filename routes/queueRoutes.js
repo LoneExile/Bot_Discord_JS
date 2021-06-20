@@ -1,6 +1,8 @@
 const express = require('express')
 const queueControllers = require('../controllers/queueControllers')
 
+const protect = require('../middleware/authMiddleware')
+
 const router = express.Router()
 
 router
@@ -11,7 +13,7 @@ router
 router
   .route('/:id')
   .get(queueControllers.getOneQueue)
-  .delete(queueControllers.deleteOneQueue)
+  .delete(protect, queueControllers.deleteOneQueue)
   .patch(queueControllers.updateQueue)
 
 module.exports = router

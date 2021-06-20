@@ -12,6 +12,7 @@ services:
       - NODE_ENV=development
       - MONGO_USER=Moo
       - MONGO_PASSWORD=password
+      - SESSION_SECRET=secret
     # package.js->:"test": "nodemon test.js"
     command: npm run dev
   mongo:

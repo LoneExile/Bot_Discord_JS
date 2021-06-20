@@ -7,6 +7,11 @@ const cors = require('cors')
 const postRoutes = require('./routes/postRoutes')
 const queueRoutes = require('./routes/queueRoutes')
 const countRoutes = require('./routes/countRoutes')
+const userRouter = require('./routes/userRoute')
+
+const session = require('express-session')
+const redis = require('redis')
+let RedisStore = require('connect-redis')(session)
 
 const {
   prefix,
@@ -14,7 +19,15 @@ const {
   MONGO_PASSWORD,
   MONGO_IP,
   MONGO_PORT,
+  REDIS_URL,
+  REDIS_PORT,
+  SESSION_SECRET,
 } = require('./config/config')
+
+let redisClient = redis.createClient({
+  host: REDIS_URL,
+  port: REDIS_PORT,
+})
 
 const app = express()
 const mongoURL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
@@ -105,11 +118,27 @@ app.get('/', (req, res) => {
   console.log('yeah it ran')
 })
 
+app.use(
+  session({
+    store: new RedisStore({ client: redisClient }),
+    secret: SESSION_SECRET,
+    cookie: {
+      //https://www.npmjs.com/package/express-session --> ## Options
+      secure: false,
+      resave: false,
+      saveUninitialized: false,
+      httpOnly: true, // javascript can't access?
+      maxAge: 30000,
+    },
+  })
+)
+
 app.use(express.json())
 
 app.use('/api/v1/posts', postRoutes)
 app.use('/api/v1/queue', queueRoutes)
 app.use('/api/v1/count', countRoutes)
+app.use('/api/v1/user', userRouter)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`listening on port ${port}`))
