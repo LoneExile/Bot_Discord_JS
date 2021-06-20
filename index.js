@@ -31,19 +31,10 @@ const connectWithRetry = () => {
       console.log(e)
       setTimeout(connectWithRetry, 5000)
     })
-
-  // Post.find({ title: 'bot_status' }, function (err, author) {
-  //   if (err) throw err
-  //   bot_status = author[0].body
-  //   console.log(author[0].body) //output => 'on'
-  // })
-  // console.log(`result = ${bot_status}`)
 }
-//const { log } = require('console')
 
 connectWithRetry()
 app.use(cors({}))
-//bot_start()
 
 try {
   if (!fs.existsSync('./config/TOKEN.js')) {
@@ -68,10 +59,9 @@ try {
 // })
 
 const BOT_TOKEN = require('./config/TOKEN')
-
-//-----------------------database testing stuff------------------------------
 const Post = require('./models/postModels')
 //const Queue = require('./models/queueModels')
+
 //----------------------discord-------------------------------
 class Client extends Discord.Client {
   queue = new Map()
