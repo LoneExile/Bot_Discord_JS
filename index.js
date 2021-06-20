@@ -19,21 +19,32 @@ const {
 const app = express()
 const mongoURL = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`
 
-const connectWithRetry = () => {
-  mongoose
-    .connect(mongoURL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    })
-    .then(() => console.log('successfully connected to db'))
-    .catch((e) => {
-      console.log(e)
-      setTimeout(connectWithRetry, 5000)
-    })
-}
+mongoose
+  .connect(mongoURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
+  .then(() => console.log('successfully connected to db'))
+  .catch((e) => {
+    console.log(e)
+  })
 
-connectWithRetry()
+// const connectWithRetry = () => {
+//   mongoose
+//     .connect(mongoURL, {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//       useFindAndModify: false,
+//     })
+//     .then(() => console.log('successfully connected to db'))
+//     .catch((e) => {
+//       console.log(e)
+//       setTimeout(connectWithRetry, 5000)
+//     })
+// }
+
+// connectWithRetry()
 app.use(cors({}))
 
 try {
