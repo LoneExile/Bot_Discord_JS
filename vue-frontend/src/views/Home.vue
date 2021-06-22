@@ -83,16 +83,44 @@ export default {
         }
     },
     async created () {
-        this.songCount = await this.fetchTasks()
-        for (let index = 0; index < this.songCount.data.count.length; index++) {
-        //   console.log(index);
-            var taskArray = {
-                id: index, 
-                text: this.songCount.data.count[index].title,
-                day: 'count = '+this.songCount.data.count[index].count 
+
+        setInterval(async () => {
+            try {
+                this.songCount = await this.fetchTasks()
+                var demo = []
+                for (let index = 0; index < this.songCount.data.count.length; index++) {
+                    var taskArray = {
+                        id: index, 
+                        text: this.songCount.data.count[index].title,
+                        day: this.songCount.data.count[index].count 
+                        //day: 'count = '+this.songCount.data.count[index].count 
+                    }
+                    demo.push(taskArray)
+                }
+                if (this.tasks !== demo) {
+                    this.tasks = [] 
+                    demo = demo.sort((a,b) => b.day - a.day)
+                    this.tasks = demo
+                    //console.log(this.tasks);
+                }
+            }catch (error) {
+                console.log(error);
             }
-            this.tasks.push(taskArray)
-        }
+
+    }, 3000);
+
+        // this.songCount = await this.fetchTasks()
+        // for (let index = 0; index < this.songCount.data.count.length; index++) {
+        //     var taskArray = {
+        //         id: index, 
+        //         text: this.songCount.data.count[index].title,
+        //         day: 'count = '+this.songCount.data.count[index].count 
+        //     }
+        //     this.tasks.push(taskArray)
+        // }
+
+
+
             //this.tasks = await this.fetchTasks()
     },
 }

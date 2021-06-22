@@ -77,7 +77,7 @@ export default {
       } catch (error) {
         console.log(error);
       } 
-    }, 10000)
+    }, 3000)
 
     // try {
     //   this.songCount = await this.fetchTasks()
