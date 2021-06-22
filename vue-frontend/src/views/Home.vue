@@ -107,7 +107,7 @@ export default {
                 console.log(error);
             }
 
-    }, 3000);
+    }, 1000);
 
         // this.songCount = await this.fetchTasks()
         // for (let index = 0; index < this.songCount.data.count.length; index++) {
