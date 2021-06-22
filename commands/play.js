@@ -36,7 +36,10 @@ module.exports = {
       }
       // console.log(serverQueue)  // info
 
-      if (!serverQueue) {
+      queueFromDB = await Queue.find().exec()
+      console.log(queueFromDB.length === 0)
+      // if(!serverQueue)
+      if (queueFromDB.length === 0) {
         const queueContruct = {
           //textChannel: msg.channel,
           //voiceChannel: voiceChannel,
@@ -50,10 +53,11 @@ module.exports = {
         //queue.set(msg.guild.id, songFromDB)
 
         //queueContruct.songs.push(song)
-        var addSong = await new Queue(song, {})
-        addSong.save(function (err) {
-          if (err) return handleError(err)
-        })
+        console.log('song is', song)
+        var addSong = await new Queue(song).save()
+        // addSong.save(async (err) => {
+        //   if (err) return handleError(err)
+        // })
         this.countFunction(song)
 
         try {
@@ -66,7 +70,7 @@ module.exports = {
 
           songFromDB = await Queue.find().exec()
           songDB = songFromDB[0]
-
+          console.log('--songDB is ', songDB)
           //this.play(msg, queueContruct.songs[0])
           this.play(msg, songDB)
         } catch (err) {
@@ -77,10 +81,10 @@ module.exports = {
       } else {
         //serverQueue.songs.push(song)
 
-        var pushSong = await new Queue(song, {})
-        pushSong.save(function (err) {
-          if (err) return handleError(err)
-        })
+        var pushSong = await new Queue(song, {}).save()
+        // pushSong.save(function (err) {
+        //   if (err) return handleError(err)
+        // })
 
         this.countFunction(song)
 
@@ -150,11 +154,26 @@ module.exports = {
             type: 'unknown',
           })
           .on('finish', async () => {
-            let deletedSong = await Queue.findByIdAndDelete(song._id).exec()
-            console.log('deleted', deletedSong)
+            let checkIfData = await Queue.find().exec()
+            console.log(checkIfData.length)
+            if (checkIfData.length !== 0) {
+              let deletedSong = await Queue.findByIdAndDelete(song._id).exec()
+              console.log('deleted', deletedSong)
+              // if (songFromDBx.length !== 0) {
+              //   let songDBx = songFromDBx[0]
+              //   //console.log('next', songDBx.title)
+              //   //serverQueue.songs.shift()
+              //   this.play(msg, songDBx)
+              // }else {
+              //   this.play(msg, songDBx)
+              // }
+            }
             let songFromDBx = await Queue.find().exec()
             let songDBx = songFromDBx[0]
-            //console.log('next', songDBx.title)
+            if (songDBx) {
+              console.log(true)
+            }
+            //serverQueue.songs.shift()
             this.play(msg, songDBx)
 
             //serverQueue.songs.shift()
