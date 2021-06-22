@@ -11,6 +11,9 @@ module.exports = {
       const args = msg.content.slice(prefix.length).trim().split(/ +/)
       const queue = msg.client.queue
       const serverQueue = msg.client.queue.get(msg.guild.id)
+      // console.log(msg)
+      // console.log(bot_status)
+      console.log(args)
 
       const voiceChannel = msg.member.voice.channel
       if (bot_status === 'off') {
