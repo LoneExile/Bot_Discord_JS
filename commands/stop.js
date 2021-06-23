@@ -13,7 +13,7 @@ module.exports = {
       )
 
     let songFromDB = await Queue.find().exec()
-    let songDB = songFromDB[0]
+    let songDB = await songFromDB[0]
 
     try {
       //console.log('stop com is ', songDB.length !== 0)

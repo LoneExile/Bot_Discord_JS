@@ -13,6 +13,7 @@ module.exports = {
       const serverQueue = msg.client.queue.get(msg.guild.id)
       // console.log(msg)
       // console.log(bot_status)
+      console.log(msg.content)
       console.log(args)
 
       const voiceChannel = msg.member.voice.channel
@@ -44,7 +45,7 @@ module.exports = {
       // console.log(serverQueue)  // info
 
       queueFromDB = await Queue.find().exec()
-      console.log(queueFromDB.length === 0)
+      // console.log(queueFromDB.length === 0)
       // if(!serverQueue)
       if (queueFromDB.length === 0) {
         const queueContruct = {
@@ -70,14 +71,14 @@ module.exports = {
         try {
           var connection = await voiceChannel.join()
 
-          queueContruct.connection = connection
+          queueContruct.connection = await connection
           // upDateConnection = await Queue.findByIdAndUpdate(addSong._id, {
           //   connection: true,
           // })
 
           songFromDB = await Queue.find().exec()
-          songDB = songFromDB[0]
-          console.log('--songDB is ', songDB)
+          songDB = await songFromDB[0]
+          //console.log('--songDB is ', songDB)
           //this.play(msg, queueContruct.songs[0])
           this.play(msg, songDB)
         } catch (err) {
@@ -106,21 +107,20 @@ module.exports = {
   async countFunction(song) {
     findCount = await Count.find().exec()
 
-    haveSongYet = findCount.some(async (inCount) => {
-      inCount.title === song.title
+    haveSongYet = findCount.some((inCount) => {
+      inCount.title == song.title
     })
+    console.log(haveSongYet)
     //console.log('check have song yet = ', haveSongYet)
     if (!haveSongYet) {
-      var addCountSong = await new Count(song, {})
-      addCountSong.save(function (err) {
-        if (err) return handleError(err)
-        //console.log('new song count!!')
-      })
-    }
-
-    findCount.map(async (inCount) => {
-      //console.log('find Count = ', inCount.title === song.title && haveSongYet)
-      if (inCount.title === song.title && haveSongYet) {
+      var addCountSong = await new Count(song).save()
+      // addCountSong.save(function (err) {
+      //   if (err) return handleError(err)
+      // })
+      console.log('new song count!!')
+    } else {
+      findCount.map(async (inCount) => {
+        //console.log('find Count = ', inCount.title === song.title && haveSongYet)
         Count.findByIdAndUpdate(
           inCount._id,
           {
@@ -131,8 +131,24 @@ module.exports = {
             console.log('count on!!')
           }
         )
-      }
-    })
+      })
+    }
+
+    // findCount.map(async (inCount) => {
+    //   //console.log('find Count = ', inCount.title === song.title && haveSongYet)
+    //   if (inCount.title === song.title && haveSongYet) {
+    //     Count.findByIdAndUpdate(
+    //       inCount._id,
+    //       {
+    //         count: inCount.count + 1,
+    //       },
+    //       function (err, howmuch) {
+    //         if (err) return handleError(err)
+    //         console.log('count on!!')
+    //       }
+    //     )
+    //   }
+    // })
   },
 
   async play(msg, song) {
@@ -162,29 +178,14 @@ module.exports = {
           })
           .on('finish', async () => {
             let checkIfData = await Queue.find().exec()
-            console.log(checkIfData.length)
+            //console.log(checkIfData.length)
             if (checkIfData.length !== 0) {
               let deletedSong = await Queue.findByIdAndDelete(song._id).exec()
-              console.log('deleted', deletedSong)
-              // if (songFromDBx.length !== 0) {
-              //   let songDBx = songFromDBx[0]
-              //   //console.log('next', songDBx.title)
-              //   //serverQueue.songs.shift()
-              //   this.play(msg, songDBx)
-              // }else {
-              //   this.play(msg, songDBx)
-              // }
+              //console.log('deleted', deletedSong)
             }
             let songFromDBx = await Queue.find().exec()
-            let songDBx = songFromDBx[0]
-            if (songDBx) {
-              console.log(true)
-            }
-            //serverQueue.songs.shift()
+            let songDBx = await songFromDBx[0]
             this.play(msg, songDBx)
-
-            //serverQueue.songs.shift()
-            // this.play(msg, serverQueue.songs[0])
           })
       })
       .catch((e) => {

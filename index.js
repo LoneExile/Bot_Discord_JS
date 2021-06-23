@@ -90,10 +90,10 @@ client.on('message', async (msg) => {
     bot_status = BOT[0].body
     //console.log(`--in try is **${bot_status}**`)
   } catch (error) {
-    var awesome_instance = new Post({ title: 'bot_status', body: 'on' })
-    awesome_instance.save(function (err) {
-      if (err) return handleError(err)
-    })
+    var awesome_instance = new Post({ title: 'bot_status', body: 'on' }).save()
+    // awesome_instance.save(function (err) {
+    //   if (err) return handleError(err)
+    // })
     // console.log(awesome_instance.body)
     bot_status = awesome_instance.body
   }
