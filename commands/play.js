@@ -26,7 +26,11 @@ module.exports = {
         return msg.channel.send('I need the permissions to do that dude')
       }
 
-      const songInfo = await ytdl.getInfo(args[1])
+      try {
+        var songInfo = await ytdl.getInfo(args[1])
+      } catch (error) {
+        console.log('getInfo')
+      }
       const song = {
         title: songInfo.videoDetails.title,
         url: songInfo.videoDetails.video_url,
