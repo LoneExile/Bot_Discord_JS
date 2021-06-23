@@ -53,7 +53,7 @@ module.exports = {
         //queue.set(msg.guild.id, songFromDB)
 
         //queueContruct.songs.push(song)
-        console.log('song is', song)
+        //console.log('song is', song)
         var addSong = await new Queue(song).save()
         // addSong.save(async (err) => {
         //   if (err) return handleError(err)
@@ -70,7 +70,7 @@ module.exports = {
 
           songFromDB = await Queue.find().exec()
           songDB = songFromDB[0]
-          console.log('--songDB is ', songDB)
+          //console.log('--songDB is ', songDB)
           //this.play(msg, queueContruct.songs[0])
           this.play(msg, songDB)
         } catch (err) {
@@ -99,33 +99,55 @@ module.exports = {
   async countFunction(song) {
     findCount = await Count.find().exec()
 
-    haveSongYet = findCount.some(async (inCount) => {
-      inCount.title === song.title
-    })
-    //console.log('check have song yet = ', haveSongYet)
+    function check(element1, index1, array) {
+      return element1.title === song.title
+    }
+    haveSongYet = findCount.some(check)
+    //console.log('haveSongYet ', haveSongYet)
+
+    // haveSongYet = findCount.some(async (inCount) => {
+    //   inCount.title === song.title
+    // })
+    // console.log('check have song yet = ', haveSongYet)
     if (!haveSongYet) {
-      var addCountSong = await new Count(song, {})
+      console.log('add song count! ')
+      var addCountSong = await new Count(song)
       addCountSong.save(function (err) {
         if (err) return handleError(err)
-        //console.log('new song count!!')
+      })
+    } else {
+      findCount.map(async (inCount) => {
+        //console.log('find Count = ', inCount.title === song.title && haveSongYet)
+        if (inCount.title === song.title && haveSongYet) {
+          Count.findByIdAndUpdate(
+            inCount._id,
+            {
+              count: inCount.count + 1,
+            },
+            function (err, howmuch) {
+              if (err) return handleError(err)
+              console.log('count on!!')
+            }
+          )
+        }
       })
     }
 
-    findCount.map(async (inCount) => {
-      //console.log('find Count = ', inCount.title === song.title && haveSongYet)
-      if (inCount.title === song.title && haveSongYet) {
-        Count.findByIdAndUpdate(
-          inCount._id,
-          {
-            count: inCount.count + 1,
-          },
-          function (err, howmuch) {
-            if (err) return handleError(err)
-            console.log('count on!!')
-          }
-        )
-      }
-    })
+    // findCount.map(async (inCount) => {
+    //   //console.log('find Count = ', inCount.title === song.title && haveSongYet)
+    //   if (inCount.title === song.title && haveSongYet) {
+    //     Count.findByIdAndUpdate(
+    //       inCount._id,
+    //       {
+    //         count: inCount.count + 1,
+    //       },
+    //       function (err, howmuch) {
+    //         if (err) return handleError(err)
+    //         console.log('count on!!')
+    //       }
+    //     )
+    //   }
+    // })
   },
 
   async play(msg, song) {
