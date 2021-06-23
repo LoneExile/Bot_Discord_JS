@@ -1,4 +1,5 @@
 FROM node
+# FROM node:14-alpine
 WORKDIR /app
 RUN apt-get update
 RUN apt-get install ffmpeg -y

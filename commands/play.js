@@ -55,23 +55,14 @@ module.exports = {
         //queueContruct.songs.push(song)
         //console.log('song is', song)
         var addSong = await new Queue(song).save()
-        // addSong.save(async (err) => {
-        //   if (err) return handleError(err)
-        // })
         this.countFunction(song)
 
         try {
           var connection = await voiceChannel.join()
-
           queueContruct.connection = connection
-          // upDateConnection = await Queue.findByIdAndUpdate(addSong._id, {
-          //   connection: true,
-          // })
-
           songFromDB = await Queue.find().exec()
           songDB = songFromDB[0]
           //console.log('--songDB is ', songDB)
-          //this.play(msg, queueContruct.songs[0])
           this.play(msg, songDB)
         } catch (err) {
           console.log(err)
@@ -79,12 +70,7 @@ module.exports = {
           return msg.channel.send(err)
         }
       } else {
-        //serverQueue.songs.push(song)
-
         var pushSong = await new Queue(song, {}).save()
-        // pushSong.save(function (err) {
-        //   if (err) return handleError(err)
-        // })
 
         this.countFunction(song)
 
@@ -103,12 +89,6 @@ module.exports = {
       return element1.title === song.title
     }
     haveSongYet = findCount.some(check)
-    //console.log('haveSongYet ', haveSongYet)
-
-    // haveSongYet = findCount.some(async (inCount) => {
-    //   inCount.title === song.title
-    // })
-    // console.log('check have song yet = ', haveSongYet)
     if (!haveSongYet) {
       console.log('add song count! ')
       var addCountSong = await new Count(song)
@@ -132,28 +112,12 @@ module.exports = {
         }
       })
     }
-
-    // findCount.map(async (inCount) => {
-    //   //console.log('find Count = ', inCount.title === song.title && haveSongYet)
-    //   if (inCount.title === song.title && haveSongYet) {
-    //     Count.findByIdAndUpdate(
-    //       inCount._id,
-    //       {
-    //         count: inCount.count + 1,
-    //       },
-    //       function (err, howmuch) {
-    //         if (err) return handleError(err)
-    //         console.log('count on!!')
-    //       }
-    //     )
-    //   }
-    // })
   },
 
   async play(msg, song) {
     const queue = msg.client.queue
     const guild = msg.guild
-    //const serverQueue = queue.get(msg.guild.id)
+    // const serverQueue = queue.get(msg.guild.id)
 
     if (!song) {
       //serverQueue.voiceChannel.leave()
@@ -161,6 +125,7 @@ module.exports = {
       return
     }
 
+    // let stream = ytdl('https://www.youtube.com/watch?v=NlZlcnUW1hc', {
     let stream = ytdl(song.url, {
       filter: 'audioonly',
       opusEncoded: false,
@@ -181,21 +146,12 @@ module.exports = {
             if (checkIfData.length !== 0) {
               let deletedSong = await Queue.findByIdAndDelete(song._id).exec()
               console.log('deleted', deletedSong)
-              // if (songFromDBx.length !== 0) {
-              //   let songDBx = songFromDBx[0]
-              //   //console.log('next', songDBx.title)
-              //   //serverQueue.songs.shift()
-              //   this.play(msg, songDBx)
-              // }else {
-              //   this.play(msg, songDBx)
-              // }
             }
             let songFromDBx = await Queue.find().exec()
             let songDBx = songFromDBx[0]
             if (songDBx) {
               console.log(true)
             }
-            //serverQueue.songs.shift()
             this.play(msg, songDBx)
 
             //serverQueue.songs.shift()
