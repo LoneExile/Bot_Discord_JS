@@ -94,7 +94,6 @@ client.on('message', async (msg) => {
     awesome_instance.save(function (err) {
       if (err) return handleError(err)
     })
-    // console.log(awesome_instance.body)
     bot_status = awesome_instance.body
   }
 
