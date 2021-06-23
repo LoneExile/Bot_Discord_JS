@@ -10,7 +10,7 @@ module.exports = {
     try {
       const args = msg.content.slice(prefix.length).trim().split(/ +/)
       const queue = msg.client.queue
-      const serverQueue = msg.client.queue.get(msg.guild.id)
+      // const serverQueue = msg.client.queue.get(msg.guild.id)
 
       const voiceChannel = msg.member.voice.channel
       if (bot_status === 'off') {
@@ -70,7 +70,7 @@ module.exports = {
           return msg.channel.send(err)
         }
       } else {
-        var pushSong = await new Queue(song, {}).save()
+        var pushSong = await new Queue(song).save()
 
         this.countFunction(song)
 
@@ -149,9 +149,6 @@ module.exports = {
             }
             let songFromDBx = await Queue.find().exec()
             let songDBx = songFromDBx[0]
-            if (songDBx) {
-              console.log(true)
-            }
             this.play(msg, songDBx)
 
             //serverQueue.songs.shift()

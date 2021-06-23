@@ -23,6 +23,7 @@ module.exports = {
         // console.log(`--stop all song`)
         // msg.channel.send(`stop all song`)
       })
+      // map.has(key) – returns true if the key exists, false otherwise. #todo use this instant
     } else if (serverQueue === undefined) {
       return msg.channel.send('no song to stop')
     }
