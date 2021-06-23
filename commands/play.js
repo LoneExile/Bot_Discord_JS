@@ -10,11 +10,7 @@ module.exports = {
     try {
       const args = msg.content.slice(prefix.length).trim().split(/ +/)
       const queue = msg.client.queue
-      const serverQueue = msg.client.queue.get(msg.guild.id)
-      // console.log(msg)
-      // console.log(bot_status)
-      console.log(msg.content)
-      console.log(args)
+      //const serverQueue = msg.client.queue.get(msg.guild.id)
 
       const voiceChannel = msg.member.voice.channel
       if (bot_status === 'off') {
@@ -61,7 +57,7 @@ module.exports = {
         //queue.set(msg.guild.id, songFromDB)
 
         //queueContruct.songs.push(song)
-        console.log('song is', song)
+        //console.log('song is', song)
         var addSong = await new Queue(song).save()
         // addSong.save(async (err) => {
         //   if (err) return handleError(err)
@@ -106,9 +102,10 @@ module.exports = {
 
   async countFunction(song) {
     findCount = await Count.find().exec()
+    console.log(song.url)
 
-    haveSongYet = findCount.some((inCount) => {
-      inCount.title == song.title
+    var haveSongYet = await findCount.some((inCount) => {
+      inCount.url === song.url
     })
     console.log(haveSongYet)
     //console.log('check have song yet = ', haveSongYet)

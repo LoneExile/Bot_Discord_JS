@@ -14,7 +14,8 @@ module.exports = {
 
     let songFromDB = await Queue.find().exec()
     let songDB = await songFromDB[0]
-
+    console.log(songDB)
+    console.log('stop is ', songDB.length !== 0)
     try {
       //console.log('stop com is ', songDB.length !== 0)
       if (songDB.length !== 0) {
