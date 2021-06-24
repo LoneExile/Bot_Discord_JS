@@ -20,8 +20,6 @@ module.exports = {
       msg.channel.send(`stop ${songDB.title}`)
       Queue.deleteMany({}).exec(function (err, post) {
         if (err) throw err
-        // console.log(`--stop all song`)
-        // msg.channel.send(`stop all song`)
       })
       // map.has(key) – returns true if the key exists, false otherwise. #todo use this instant
     } else if (serverQueue === undefined) {
