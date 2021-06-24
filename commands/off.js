@@ -1,4 +1,4 @@
-const Post = require('../models/postModels')
+const Status = require('../models/statusModel')
 
 module.exports = {
   name: 'off',
@@ -7,8 +7,8 @@ module.exports = {
     if (bot_status === 'off') {
       return msg.channel.send('bot is offline')
     }
-    Post.updateOne(
-      { title: 'bot_status', body: 'off' },
+    Status.updateOne(
+      { title: 'bot_status', status: 'off' },
       function (err, awesome_instance) {
         if (err) return handleError(err)
         console.log('shift off!!')

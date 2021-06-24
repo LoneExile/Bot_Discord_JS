@@ -1,4 +1,4 @@
-const Post = require('../models/postModels')
+const Status = require('../models/statusModel')
 
 module.exports = {
   name: 'on',
@@ -9,24 +9,15 @@ module.exports = {
     }
 
     try {
-      Post.updateOne(
-        { title: 'bot_status', body: 'on' },
+      Status.updateOne(
+        { title: 'bot_status', status: 'on' },
         function (err, awesome_instance) {
           if (err) return handleError(err)
           console.log('shift on!!')
         }
-        // const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
-        //   new: true,
-        //   runValidators: true,
-        // })
       )
     } catch (error) {
       console.log(error)
     }
   },
 }
-
-// var storySchema = Schema({
-//   author : { type: Schema.Types.ObjectId, ref: 'Author' },
-//   title    : String
-// });
