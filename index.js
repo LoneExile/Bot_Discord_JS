@@ -134,6 +134,8 @@ app.use(
 
 app.use(express.json())
 
+//const protect = require('./middleware/authMiddleware')
+//app.use(protect)
 app.use('/api/v1/status', statusRoutes)
 app.use('/api/v1/queue', queueRoutes)
 app.use('/api/v1/count', countRoutes)

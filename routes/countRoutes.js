@@ -12,7 +12,7 @@ router
 router
   .route('/:id')
   .get(countControllers.getOneCount)
-  .delete(protect, countControllers.deleteOneCount)
+  .delete(countControllers.deleteOneCount)
   .patch(countControllers.updateCount)
 
 module.exports = router
