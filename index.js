@@ -134,12 +134,21 @@ app.use(
 
 app.use(express.json())
 
+function errorHandler(err, req, res, next) {
+  // res.json({ err: err })
+  if (err) {
+    res.send('<h1> There was an error, please try again later</h1>')
+  }
+}
+
 //const protect = require('./middleware/authMiddleware')
 //app.use(protect)
 app.use('/api/v1/status', statusRoutes)
 app.use('/api/v1/queue', queueRoutes)
 app.use('/api/v1/count', countRoutes)
 app.use('/api/v1/user', userRouter)
+
+app.use(errorHandler)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`listening on port ${port}`))
