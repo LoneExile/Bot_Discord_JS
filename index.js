@@ -112,11 +112,6 @@ try {
   console.log('add token at ./config/TOKEN.js')
 }
 
-app.get('/', (req, res) => {
-  res.send('<h1>bot discord</h1>')
-  console.log('yeah it ran')
-})
-
 app.use(
   session({
     store: new RedisStore({ client: redisClient }),
@@ -126,7 +121,7 @@ app.use(
       secure: false,
       resave: false,
       saveUninitialized: false,
-      httpOnly: true, // javascript can't access?
+      httpOnly: true,
       maxAge: 30000,
     },
   })
@@ -141,6 +136,12 @@ function errorHandler(err, req, res, next) {
   }
 }
 
+app.get('/', (req, res) => {
+  res.send('<h1>bot discord</h1>')
+  //req.session.viewCount
+  console.log('yeah it ran')
+})
+
 //const protect = require('./middleware/authMiddleware')
 //app.use(protect)
 app.use('/api/v1/status', statusRoutes)
@@ -148,7 +149,7 @@ app.use('/api/v1/queue', queueRoutes)
 app.use('/api/v1/count', countRoutes)
 app.use('/api/v1/user', userRouter)
 
-app.use(errorHandler)
+// app.use(errorHandler) // add next() to all controllers
 
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`listening on port ${port}`))

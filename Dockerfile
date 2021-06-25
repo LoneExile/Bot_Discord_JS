@@ -3,6 +3,9 @@ FROM node
 WORKDIR /app
 RUN apt-get update
 RUN apt-get install ffmpeg -y
+RUN apt-get install -y opus-tools
+RUN apt-get update -y
+
 COPY package*.json ./
 # RUN npm ci
 ARG NODE_ENV
