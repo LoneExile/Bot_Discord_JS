@@ -11,13 +11,6 @@ module.exports = {
 
     try {
       findCount = await Count.find().exec()
-      // console.log(findCount)
-      // var songTop = findCount.map((top) => ({
-      //   song: top.title,
-      //   count: top.count,
-      // }))
-      // console.log(songTop)
-      // var songTopSort = songTop.sort((a, b) => b.count - a.count)
       var songTopSort = findCount.sort((a, b) => b.count - a.count)
       console.log(songTopSort)
       var text = ''
