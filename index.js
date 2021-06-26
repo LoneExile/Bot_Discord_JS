@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const fs = require('fs')
 const cors = require('cors')
 
-const postRoutes = require('./routes/postRoutes')
+const statusRoutes = require('./routes/statusRoutes')
 const queueRoutes = require('./routes/queueRoutes')
 const countRoutes = require('./routes/countRoutes')
 const userRouter = require('./routes/userRoute')
@@ -50,7 +50,7 @@ connectWithRetry()
 app.use(cors({}))
 
 const BOT_TOKEN = require('./config/TOKEN')
-const Post = require('./models/postModels')
+const Status = require('./models/statusModel')
 //const Queue = require('./models/queueModels')
 
 //----------------------discord-------------------------------
@@ -85,16 +85,16 @@ client.on('message', async (msg) => {
 
   // console.log(`--msg is ${msg}`)
 
-  let BOT = await Post.find({ title: 'bot_status' })
+  let BOT = await Status.find({ title: 'bot_status' })
   try {
-    bot_status = BOT[0].body
+    bot_status = BOT[0].status
     //console.log(`--in try is **${bot_status}**`)
   } catch (error) {
-    var awesome_instance = new Post({ title: 'bot_status', body: 'on' })
+    var awesome_instance = new Status({ title: 'bot_status', status: 'on' })
     awesome_instance.save(function (err) {
       if (err) return handleError(err)
     })
-    bot_status = awesome_instance.body
+    bot_status = awesome_instance.status
   }
 
   try {
@@ -112,11 +112,6 @@ try {
   console.log('add token at ./config/TOKEN.js')
 }
 
-app.get('/', (req, res) => {
-  res.send('<h1>bot discord</h1>')
-  console.log('yeah it ran')
-})
-
 app.use(
   session({
     store: new RedisStore({ client: redisClient }),
@@ -126,7 +121,7 @@ app.use(
       secure: false,
       resave: false,
       saveUninitialized: false,
-      httpOnly: true, // javascript can't access?
+      httpOnly: true,
       maxAge: 30000,
     },
   })
@@ -134,10 +129,27 @@ app.use(
 
 app.use(express.json())
 
-app.use('/api/v1/posts', postRoutes)
+function errorHandler(err, req, res, next) {
+  // res.json({ err: err })
+  if (err) {
+    res.send('<h1> There was an error, please try again later</h1>')
+  }
+}
+
+app.get('/', (req, res) => {
+  res.send('<h1>bot discord</h1>')
+  //req.session.viewCount
+  console.log('yeah it ran')
+})
+
+//const protect = require('./middleware/authMiddleware')
+//app.use(protect)
+app.use('/api/v1/status', statusRoutes)
 app.use('/api/v1/queue', queueRoutes)
 app.use('/api/v1/count', countRoutes)
 app.use('/api/v1/user', userRouter)
+
+// app.use(errorHandler) // add next() to all controllers
 
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`listening on port ${port}`))

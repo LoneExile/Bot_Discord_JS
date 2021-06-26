@@ -17,6 +17,7 @@ client.on('message', (msg) => {
       opusEncoded: true,
       encoderArgs: ['-af', 'bass=g=10,dynaudnorm=f=200'],
     })
+    console.log('stream ')
     console.log(stream)
     msg.member.voice.channel.join().then((connection) => {
       let dispatcher = connection

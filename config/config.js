@@ -1,5 +1,5 @@
 module.exports = {
-  prefix: (process.env.prefix = '#!'),
+  prefix: (process.env.prefix = '>'),
   MONGO_IP: process.env.MONGO_IP || 'mongo',
   MONGO_PORT: process.env.MONGO_PORT || 27017,
   MONGO_USER: process.env.MONGO_USER,
