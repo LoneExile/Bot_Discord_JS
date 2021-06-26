@@ -145,7 +145,7 @@ module.exports = {
             console.log(checkIfData.length)
             if (checkIfData.length !== 0) {
               let deletedSong = await Queue.findByIdAndDelete(song._id).exec()
-              console.log('deleted', deletedSong)
+              console.log('deleted', deletedSong.title)
             }
             let songFromDBx = await Queue.find().exec()
             let songDBx = songFromDBx[0]
