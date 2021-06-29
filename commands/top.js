@@ -14,21 +14,26 @@ module.exports = {
       var songTopSort = findCount.sort((a, b) => b.count - a.count)
       console.log(songTopSort)
       var text = ''
-      for (let index = 0; index < songTopSort.length; index++) {
+      songTopSort.length > 5 ? (listTop = 5) : (listTop = songTopSort.length)
+      for (let index = 0; index < listTop; index++) {
         text +=
           index +
           1 +
           '. ' +
-          songTopSort[index].title +
-          ' **[' +
+          `[${songTopSort[index].title}](${songTopSort[index].url})` +
+          // songTopSort[index].title +
+          ' -- [** ' +
           songTopSort[index].count +
-          ' time]** \n'
+          ' **time ] \n' +
+          '```>play ' +
+          songTopSort[index].url +
+          '```\n'
       }
       // msg.channel.send(text)
 
       const msgEmbed = new Discord.MessageEmbed()
         .setColor('#0099ff')
-        .setTitle('Top 5 song')
+        .setTitle(`Top ${listTop} song`)
         .setDescription(text)
 
       msg.channel.send(msgEmbed)
