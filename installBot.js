@@ -11,11 +11,3 @@ try {
   console.error(err)
 }
 
-// fs.access('./config/TOKEN.js', fs.F_OK, (err) => {
-//   if (err) {
-//     console.error(err)
-//     return
-//   }
-
-//   //file exists
-// })
